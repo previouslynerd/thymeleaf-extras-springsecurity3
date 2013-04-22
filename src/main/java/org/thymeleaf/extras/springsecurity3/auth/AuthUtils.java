@@ -21,6 +21,7 @@ package org.thymeleaf.extras.springsecurity3.auth;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -310,9 +311,8 @@ public final class AuthUtils {
         }
         
         final boolean result =
-                getPrivilegeEvaluator(servletContext).isAllowed(
-                    request.getContextPath(), url, method, authentication) ? 
-                            true : false;
+        		allowAccess(servletContext, request.getContextPath(), url,
+        				method, authentication);
 
         if (logger.isTraceEnabled()) {
             logger.trace("[THYMELEAF][{}] Checked authorization for URL \"{}\" and method \"{}\" for user \"{}\". " +
@@ -329,7 +329,27 @@ public final class AuthUtils {
 
 
     
-    private static WebInvocationPrivilegeEvaluator getPrivilegeEvaluator(final ServletContext servletContext) {
+    private static boolean allowAccess(final ServletContext servletContext,
+    		final String contextPath, final String uri, final String method,
+    		final Authentication authentication) {
+
+        for (WebInvocationPrivilegeEvaluator wipe : getPrivilegeEvaluators(servletContext)) {
+
+        	if (!wipe.isAllowed(contextPath, uri, method, authentication))
+        		return false;
+
+        }
+
+        return true;
+        
+    }
+
+
+    
+
+
+    
+    private static Collection<WebInvocationPrivilegeEvaluator> getPrivilegeEvaluators(final ServletContext servletContext) {
 
         final ApplicationContext ctx =
                 WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
@@ -344,7 +364,7 @@ public final class AuthUtils {
                     "Spring Security authorization queries.");
         }
 
-        return (WebInvocationPrivilegeEvaluator) privilegeEvaluators.values().toArray()[0];
+        return privilegeEvaluators.values();
         
     }
     
