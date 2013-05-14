@@ -160,7 +160,7 @@ public final class AuthUtils {
             
             if (logger.isTraceEnabled()) {
                 logger.trace("[THYMELEAF][{}] Property \"{}\" obtained from authentication object " +
-                		"for user \"{}\". Returned value of class {}.",
+                        "for user \"{}\". Returned value of class {}.",
                         new Object[] {TemplateEngine.threadIndex(), property, authentication.getName(), 
                                 (propertyObj == null? null : propertyObj.getClass().getName())});
             }
@@ -311,8 +311,8 @@ public final class AuthUtils {
         }
         
         final boolean result =
-        		allowAccess(servletContext, request.getContextPath(), url,
-        				method, authentication);
+                allowAccess(servletContext, request.getContextPath(), url,
+                        method, authentication);
 
         if (logger.isTraceEnabled()) {
             logger.trace("[THYMELEAF][{}] Checked authorization for URL \"{}\" and method \"{}\" for user \"{}\". " +
@@ -330,13 +330,13 @@ public final class AuthUtils {
 
     
     private static boolean allowAccess(final ServletContext servletContext,
-    		final String contextPath, final String uri, final String method,
-    		final Authentication authentication) {
+            final String contextPath, final String uri, final String method,
+            final Authentication authentication) {
 
         for (WebInvocationPrivilegeEvaluator wipe : getPrivilegeEvaluators(servletContext)) {
 
-        	if (!wipe.isAllowed(contextPath, uri, method, authentication))
-        		return false;
+            if (!wipe.isAllowed(contextPath, uri, method, authentication))
+                return false;
 
         }
 
@@ -380,7 +380,7 @@ public final class AuthUtils {
 
         if (logger.isTraceEnabled()) {
             logger.trace("[THYMELEAF][{}] Checking authorization using Access Control List for user \"{}\". " +
-            		"Domain object is of class \"{}\" and permissions are \"{}\".",
+                    "Domain object is of class \"{}\" and permissions are \"{}\".",
                     new Object[] {TemplateEngine.threadIndex(), (authentication == null? null : authentication.getName()),
                             (domainObject == null? null : domainObject.getClass().getName()), permissions});
         }
@@ -435,7 +435,7 @@ public final class AuthUtils {
         if (domainObject == null) {
             if (logger.isTraceEnabled()) {
                 logger.trace("[THYMELEAF][{}] Domain object for resolved to null. Access by " +
-                		"Access Control List is GRANTED.", new Object[] {TemplateEngine.threadIndex()});
+                        "Access Control List is GRANTED.", new Object[] {TemplateEngine.threadIndex()});
             }
             // Access to null object is considered always true
             return true;
